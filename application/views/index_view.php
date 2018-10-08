@@ -16,7 +16,7 @@
                         </div>
                         <p>Are you wanna take your gift?</p>
                         <div class="editable-buttons">
-                            <span id="exchange" class="btn btn-primary btn-sm">Exchange</span>
+                            <span id="exchange" class="btn btn-primary btn-sm" style="display: none">Exchange</span>
                             <input type="hidden" id="giftId" value="">
                             <span id="yes" class="btn btn-primary btn-sm"><i
                                         class="glyphicon glyphicon-ok"></i></span>
