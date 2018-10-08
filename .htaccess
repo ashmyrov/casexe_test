@@ -1,0 +1,29 @@
+order deny,allow
+deny from all
+allow from all
+Options +FollowSymlinks -MultiViews
+    RewriteEngine on
+
+	RewriteBase /casexe_test/
+
+	RemoveHandler .html .htm
+
+	AddType application/x-httpd-php .php .htm .html .phtml
+	
+	RewriteRule ^(\w{2})/$ ?lang=$1 [L]
+	RewriteRule ^404/$ ?route=404 [L]
+	
+	RewriteRule ^(special)/$ ?route=$1 [L]
+	RewriteRule ^(cart)/$ ?route=$1 [L]
+	RewriteRule ^(checkout)/$ ?route=$1 [L]
+	RewriteRule ^(ajax)/([^/\.]+)/$ ?route=$1&action=$2 [L]
+	RewriteRule ^(\w{2})/(\w{3,8})/$ ?route=$2&lang=$1 [L]
+	RewriteRule ^(\w{3,8})/([^/\.]+)/([^/\.]+)/$ ?route=$1&id=$2 [L]
+	RewriteRule ^(\w{2})/(\w{3,8})/([^/\.]+)/([^/\.]+)/$ ?route=$2&id=$3&lang=$1 [L]
+	
+	RewriteRule ^search/$ search.php [L]
+	RewriteRule ^search/c-([^/\.]+)/([^/\.]+)/$ search.php?search=$2&id_category=$1 [L]
+
+	
+
+ErrorDocument 404 /404/
