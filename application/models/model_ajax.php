@@ -37,4 +37,31 @@ class Model_Ajax extends Model
         $result = $sth->fetch(PDO::FETCH_ASSOC);
         return $result;
     }
+
+    function saveGift($gift){
+        $sql = 'INSERT INTO `usersgifts` (user_id, gift_id, gift_value,status)
+                VALUES (:user_id, :gift_id, :gift_val, :status)';
+        $sth = $this->conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array(':user_id' => $_SESSION['logined']['id'], ':gift_id' => $gift['id'], ':gift_val' => $gift['value'], ':status' => $gift['status']));
+
+    }
+
+    function exchangeGift($points){
+        $sql = 'UPDATE `users`
+                SET points = points + :money
+                WHERE id = :id';
+        $sth = $this->conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array(':id' => $_SESSION['logined']['id'], ':money' => $points));
+
+    }
+
+    function getPoints(){
+        $sql = 'SELECT points
+                FROM users
+                WHERE id = :id LIMIT 1';
+        $sth = $this->conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->execute(array(':id' => $_SESSION['logined']['id']));
+        $result = $sth->fetch(PDO::FETCH_ASSOC)['points'];
+        return $result;
+    }
 }

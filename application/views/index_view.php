@@ -10,17 +10,18 @@
                 <div class="control-group form-group">
                     <div>
                         <div class="editable-input">
-                        <p>Your gift is <span id="gift"></span>!!!!! <br>
-                        And it's <span id="giftValue"></span>
-                        </p>
+                            <p>Your gift is <span id="gift"></span>!!!!! <br>
+                                And it's <span id="giftValue"></span>
+                            </p>
                         </div>
                         <p>Are you wanna take your gift?</p>
                         <div class="editable-buttons">
+                            <span id="exchange" class="btn btn-primary btn-sm">Exchange</span>
                             <input type="hidden" id="giftId" value="">
-                            <button type="submit" id="yes" class="btn btn-primary btn-sm editable-submit"><i
-                                        class="glyphicon glyphicon-ok"></i></button>
-                            <button type="button" id="no" class="btn btn-default btn-sm editable-cancel"><i
-                                        class="glyphicon glyphicon-remove"></i></button>
+                            <span id="yes" class="btn btn-primary btn-sm"><i
+                                        class="glyphicon glyphicon-ok"></i></span>
+                            <span id="no" class="btn btn-danger btn-sm"><i
+                                        class="glyphicon glyphicon-remove"></i></span>
                         </div>
                     </div>
                     <div class="editable-error-block help-block" style="display: none;"></div>
@@ -33,29 +34,89 @@
     $('#getGift').click(function () {
         $(this).prop('disabled', true);
         $.ajax({
-            type:"POST",
-            url:'ajax/getGift/',
-            success: function(response){
+            type: "POST",
+            url: 'ajax/getGift/',
+            success: function (response) {
                 response = JSON.parse(response);
-                    $('#gift').html(response.name);
-                    $('#giftValue').html(response.value);
-                    $('#giftId').html(response.type);
-                    $('.popover').show(500);
+                if (response.type === 2) {
+                    $('#exchange').show();
                 }
+                $('#gift').html(response.name);
+                $('#giftValue').html(response.value);
+                $('#giftId').val(response.type);
+                $('.popover').show(500);
+            }
 
         });
     });
 
     $('#yes').click(function () {
+        var id = $('#giftId').val();
         $.ajax({
-            type:"POST",
-            url:'ajax/saveGift/',
-            success: function(response){
-
-
-                $('#getGift').prop('disabled', false);
-            }
-
+            type: "POST",
+            data: {
+                id: id,
+                value: $('#giftValue').html(),
+                status: 1
+            },
+            url: 'ajax/saveGift/'
         });
-    }
+        if(id === '3'){
+            console.log('1111');
+            $.ajax({
+                type: "POST",
+                url: 'ajax/updatePoints/',
+                success: function (response) {
+                    $('#points').fadeOut('slow', function () {
+                        $(this).html(response).fadeIn('slow');
+                    })
+                }
+            });
+        }
+
+        $('.popover').hide(500);
+        $('#exchange').hide();
+        $('#getGift').prop('disabled', false);
+    });
+
+    $('#no').click(function () {
+        $.ajax({
+            type: "POST",
+            data: {
+                id: $('#giftId').val(),
+                value: $('#giftValue').html(),
+                status: 0
+            },
+            url: 'ajax/saveGift/'
+        });
+        $('.popover').hide(500);
+        $('#exchange').hide();
+        $('#getGift').prop('disabled', false);
+    });
+
+    $('#exchange').click(function () {
+        $.ajax({
+            type: "POST",
+            data: {
+                id: $('#giftId').val(),
+                value: $('#giftValue').html(),
+                status: 2
+            },
+            url: 'ajax/saveGift/'
+        });
+
+        $.ajax({
+            type: "POST",
+            url: 'ajax/updatePoints/',
+            success: function (response) {
+                $('#points').fadeOut('slow', function () {
+                    $(this).html(response).fadeIn('slow');
+                })
+            }
+        });
+        $('.popover').hide(500);
+        $('#exchange').hide();
+        $('#getGift').prop('disabled', false);
+    });
+
 </script>

@@ -2,6 +2,8 @@
 
 class Controller_Ajax extends Controller
 {
+    private $rate = 1.25;
+
     function __construct()
     {
         $this->model = new Model_Ajax();
@@ -12,7 +14,6 @@ class Controller_Ajax extends Controller
         $data['logined'] = $this->model->checkUser($_POST);
         if ($data['logined']) {
             $_SESSION['logined'] = $data['logined'];
-            echo 'success';
         }
 
     }
@@ -65,6 +66,21 @@ class Controller_Ajax extends Controller
         return random_int($subjectsArray['min'], $subjectsArray['max']);
     }
 
+    function action_saveGift(){
+        if($_POST['status'] == 2 || $_POST['id'] == 3){
+            $this->model->saveGift($_POST);
+            $points = $_POST['value'] * $this->rate;
+            $this->model->exchangeGift($points);
+        }else{
+            $this->model->saveGift($_POST);
+        }
+
+    }
+
+    function action_updatePoints(){
+        $points = $this->model->getPoints();
+        echo $points;
+    }
 
 }
 
