@@ -62,7 +62,6 @@
             url: 'ajax/saveGift/'
         });
         if(id === '3'){
-            console.log('1111');
             $.ajax({
                 type: "POST",
                 url: 'ajax/updatePoints/',
