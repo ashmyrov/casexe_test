@@ -8,8 +8,8 @@ class Controller_Index extends Controller
 	}
 	function action_index()
 	{
-
-		$this->view->generate('index_view.php', 'main_view.php');
+        $data['points'] = $this->model->getPoints();
+		$this->view->generate('index_view.php', 'main_view.php',$data);
 	}
 	
 }

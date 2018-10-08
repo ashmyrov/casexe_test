@@ -31,6 +31,7 @@
                 </div>
             </div>
             <div class="col-md-5">
+                <p class="btn btn-primary" style="cursor: default;">You have <?=$data['points']?> Points</p>
             </div>
             <div class="col-md-2">
                 <div class="navbar navbar-inverse" role="banner">
